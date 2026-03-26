@@ -116,7 +116,7 @@ export const TRACK_GROUPS: { theme: ThemeKey; tracks: Track[] }[] = [
             { id: "https://drive.google.com/file/d/1OWsrkyAxWP3v9xXROlt_UPVYUqYfcice/view?usp=sharing", title: "Naal Nachna", artist: "Afsana Khan, Reble, Irshad", duration: "2:50", theme: "party", image: 'https://i.ytimg.com/vi/P4UnrmPFPA4/maxresdefault.jpg' },
             { id: "https://drive.google.com/file/d/1njMjpqRQ0ehMAZKfiM2EZm5xqhJFNmcl/view?usp=sharing", title: "Ramba Ho", artist: "Madhubanti Bagchi", duration: "2:42", theme: "party", image: 'https://i.scdn.co/image/ab67616d0000b27305076f623489e8c8eb5e9ed4' },
             { id: "https://drive.google.com/file/d/1wzLoRvO7DaReVI1i549OnJT7trBAYTPZ/view?usp=sharing", title: "Lutt Le Gaya", artist: "Shashwat S, Simran Choudhary", duration: "2:38", theme: "party", image: 'https://i.ytimg.com/vi/hMUM2IKOG-c/sddefault.jpg' },
-            { id: "https://drive.google.com/file/d/1wzLoRvO7DaReVI1i549OnJT7trBAYTPZ/view?usp=sharing", title: "Fliberachie", artist: "Shashwat S, Simran Choudhary", duration: "2:38", theme: "party", image: '' },
+            // { id: "https://drive.google.com/file/d/1wzLoRvO7DaReVI1i549OnJT7trBAYTPZ/view?usp=sharing", title: "Fliberachie", artist: "Shashwat S, Simran Choudhary", duration: "2:38", theme: "party", image: '' },
         ],
     },
     {
