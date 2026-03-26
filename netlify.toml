@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[functions]
+  directory = "netlify/edge-functions"
+
+[[edge_functions]]
+  path = "/api/audio"
+  function = "audio-proxy"
+
+[[headers]]
+  for = "/api/audio"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, s-maxage=86400"
+    Access-Control-Allow-Origin = "*"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"]}
