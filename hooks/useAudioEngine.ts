@@ -47,7 +47,8 @@ export function useAudioEngine(): AudioEngine {
             let smoothed = 0;
             const tick = () => {
                 if (!analyserRef.current || !dataRef.current) return;
-                analyserRef.current.getByteFrequencyData(dataRef.current);
+                // Cast to any to satisfy the strict TS compiler during build (Uint8Array buffer-type mismatch)
+                analyserRef.current.getByteFrequencyData(dataRef.current as any);
                 let sum = 0;
                 for (let i = 0; i < 6; i++) sum += dataRef.current[i];
                 const raw = sum / (6 * 255);

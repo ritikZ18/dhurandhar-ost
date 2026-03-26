@@ -81,33 +81,24 @@ export default function HomePage() {
       const q = shuffleQueue.length ? shuffleQueue : buildQueue(currentIdx);
       const pos = q.indexOf(currentIdx);
       const ni = q[(pos + 1) % q.length];
-      loadTrack(allTracks[ni], ni, engine.isPlaying);
+      loadTrack(allTracks[ni], ni, true);
     } else {
       let idx = currentIdx;
       do { idx = (idx + 1) % allTracks.length; }
       while (!trackSrc(allTracks[idx]) && idx !== currentIdx);
-      loadTrack(allTracks[idx], idx, engine.isPlaying);
+      loadTrack(allTracks[idx], idx, true);
     }
-  }, [shuffleOn, shuffleQueue, currentIdx, buildQueue, loadTrack, engine.isPlaying]);
+  }, [shuffleOn, shuffleQueue, currentIdx, buildQueue, loadTrack]);
 
   const prevTrack = useCallback(() => {
     if (engine.currentTime > 3) { engine.seek(0); return; }
     let idx = currentIdx;
     do { idx = (idx - 1 + allTracks.length) % allTracks.length; }
     while (!trackSrc(allTracks[idx]) && idx !== currentIdx);
-    loadTrack(allTracks[idx], idx, engine.isPlaying);
+    loadTrack(allTracks[idx], idx, true);
   }, [currentIdx, engine, loadTrack]);
 
   const toggleShuffle = () => { const n = !shuffleOn; setShuffleOn(n); if (n) buildQueue(currentIdx); };
-
-  // Auto-advance on ended
-  useEffect(() => {
-    const el = engine.audioRef.current;
-    if (!el) return;
-    const fn = () => nextTrack();
-    el.addEventListener("ended", fn);
-    return () => el.removeEventListener("ended", fn);
-  }, [nextTrack]);
 
   // Pre-buffer Didi during preloader
   const armed = useRef(false);
@@ -234,7 +225,11 @@ export default function HomePage() {
         />
 
         {/* Hidden audio element */}
-        <audio ref={engine.audioRef as React.RefObject<HTMLAudioElement>} preload="auto" />
+        <audio
+          ref={engine.audioRef as React.RefObject<HTMLAudioElement>}
+          preload="auto"
+          onEnded={nextTrack}
+        />
       </div>
     </>
   );
