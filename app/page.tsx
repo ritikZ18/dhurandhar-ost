@@ -148,7 +148,7 @@ export default function HomePage() {
 
         {/* ── NAV BAR ── */}
         <nav
-          className="relative z-50 flex items-center justify-between px-10 h-14 shrink-0"
+          className="relative z-50 flex items-center justify-between px-6 lg:px-10 h-14 shrink-0"
           style={{
             borderBottom: `1px solid ${th.p1}18`,
             background: `${th.bg}d0`,
@@ -156,27 +156,27 @@ export default function HomePage() {
             transition: "background 0.9s ease, border-color 0.9s ease",
           }}
         >
-          <div className="flex items-baseline gap-3">
-            <span className="font-bebas text-[20px] tracking-[0.3em]" style={{ color: th.p1, transition: "color 0.9s ease" }}>
+          <div className="flex items-baseline gap-2 lg:gap-3">
+            <span className="font-bebas text-[18px] lg:text-[20px] tracking-[0.2em] lg:tracking-[0.3em]" style={{ color: th.p1, transition: "color 0.9s ease" }}>
               DHURANDHAR
             </span>
-            <span className="font-mono text-[9px] tracking-[0.22em] opacity-40" style={{ color: th.text }}>
+            <span className="hidden sm:inline font-mono text-[9px] tracking-[0.22em] opacity-40" style={{ color: th.text }}>
               THE REVENGE / OST
             </span>
           </div>
 
           {/* Theme palette dots */}
-          <div className="flex items-center gap-4">
-            <span className="font-mono text-[9px] tracking-[0.3em] opacity-35" style={{ color: th.text }}>MOOD</span>
+          <div className="flex items-center gap-3 lg:gap-4">
+            <span className="hidden xs:inline font-mono text-[9px] tracking-[0.3em] opacity-35" style={{ color: th.text }}>MOOD</span>
             {(Object.keys(THEMES) as ThemeKey[]).map((key) => (
               <button key={key} title={THEMES[key].label}
                 onClick={() => { setManualTheme(key); applyTheme(key); }}
-                className="w-[10px] h-[10px] rounded-full border transition-all duration-300"
+                className="w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] rounded-full border transition-all duration-300"
                 style={{
                   background: THEMES[key].p1,
                   borderColor: themeKey === key ? "#fff" : "rgba(255,255,255,0.12)",
                   boxShadow: themeKey === key ? `0 0 8px ${THEMES[key].p1}` : "none",
-                  transform: themeKey === key ? "scale(1.5)" : "scale(1)",
+                  transform: themeKey === key ? "scale(1.4)" : "scale(1)",
                 }}
               />
             ))}
@@ -184,12 +184,12 @@ export default function HomePage() {
         </nav>
 
         {/* ── MAIN CONTENT ROW ── */}
-        <div className="relative z-10 flex flex-1 min-h-0">
+        <div className="relative z-10 flex flex-col lg:flex-row flex-1 min-h-0">
 
-          {/* LEFT: Player Hero — wider, vertically centered */}
+          {/* TOP/LEFT: Player Hero — wider, vertically centered */}
           <div
-            className="flex-1 flex flex-col justify-center overflow-hidden"
-            style={{ borderRight: `1px solid ${th.p1}14` }}
+            className="h-[54vh] shrink-0 lg:h-auto lg:flex-1 flex flex-col justify-center overflow-hidden"
+            style={{ borderBottom: `1px solid ${th.p1}08`, lgBorderBottom: "none", borderRight: `none`, lgBorderRight: `1px solid ${th.p1}14` } as any}
           >
             <PlayerHero
               track={currentTrack}
@@ -202,10 +202,10 @@ export default function HomePage() {
             />
           </div>
 
-          {/* RIGHT: TrackList — compact fixed width, internal scroll */}
+          {/* BOTTOM/RIGHT: TrackList — compact fixed width, internal scroll */}
           <div
-            className="overflow-y-auto flex-shrink-0"
-            style={{ width: 540, scrollbarGutter: "stable" }}
+            className="flex-1 min-h-0 lg:flex-none overflow-y-auto lg:w-[540px]"
+            style={{ scrollbarGutter: "stable" }}
           >
             <TrackList
               currentTrack={currentTrack}

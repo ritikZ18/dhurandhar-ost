@@ -22,7 +22,7 @@ export default function BottomBar({ track, currentTime, duration, themeKey }: Pr
 
     return (
         <div
-            className="relative flex items-center gap-6 px-10 h-9 shrink-0"
+            className="relative flex items-center gap-4 lg:gap-6 px-6 lg:px-10 h-9 shrink-0"
             style={{
                 borderTop: `1px solid ${th.p1}14`,
                 background: `${th.bg}d0`,
@@ -32,7 +32,7 @@ export default function BottomBar({ track, currentTime, duration, themeKey }: Pr
         >
             {/* Track title */}
             <span
-                className="font-mono text-[9px] tracking-[0.25em] uppercase truncate max-w-[200px] opacity-50"
+                className="font-mono text-[8px] lg:text-[9px] tracking-[0.2em] lg:tracking-[0.25em] uppercase truncate max-w-[120px] lg:max-w-[200px] opacity-50"
                 style={{ color: th.text }}
             >
                 {track.title}

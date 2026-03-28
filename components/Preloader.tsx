@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import FissionSwarm from "./FissionSwarm";
 
 interface Props {
     onEnter: () => void;
@@ -10,7 +11,7 @@ interface Props {
 const TITLE_CHARS = "DHURANDHAR".split("");
 
 export default function Preloader({ onEnter }: Props) {
-    const [phase, setPhase] = useState<"silent" | "line" | "title">("silent");
+    const [phase, setPhase] = useState<"swarm" | "line" | "title">("swarm");
     const [entered, setEntered] = useState(false);
     const fireRef = useRef<HTMLCanvasElement>(null);
     const rafRef = useRef<number>(0);
@@ -88,12 +89,10 @@ export default function Preloader({ onEnter }: Props) {
         return () => { cancelAnimationFrame(rafRef.current); window.removeEventListener("resize", resize); };
     }, []);
 
-    // ── Phase timing ─────────────────────────────────────────────────────
-    useEffect(() => {
-        const t1 = setTimeout(() => setPhase("line"), 1000);
-        const t2 = setTimeout(() => setPhase("title"), 2300);
-        return () => { clearTimeout(t1); clearTimeout(t2); };
-    }, []);
+    const handleSwarmFinish = () => {
+        setPhase("line");
+        setTimeout(() => setPhase("title"), 400);
+    };
 
     const handleEnter = () => {
         setEntered(true);
@@ -108,8 +107,13 @@ export default function Preloader({ onEnter }: Props) {
                     exit={{ opacity: 0, scale: 1.05, filter: "blur(16px)" }}
                     transition={{ duration: 0.85, ease: [0.25, 0.1, 0.25, 1] }}
                 >
+                    {/* Particles Swarm — Initial High Energy Opening */}
+                    {phase === "swarm" && (
+                        <FissionSwarm onFinish={handleSwarmFinish} />
+                    )}
+
                     {/* Fire canvas */}
-                    <canvas ref={fireRef} className="absolute inset-0 pointer-events-none" style={{ mixBlendMode: "screen" }} />
+                    <canvas ref={fireRef} className="absolute inset-0 pointer-events-none" style={{ mixBlendMode: "screen", opacity: phase === "swarm" ? 0.3 : 1, transition: "opacity 2s ease" }} />
 
                     {/* Centre vignette for legibility */}
                     <div className="absolute inset-0 pointer-events-none"
@@ -120,7 +124,7 @@ export default function Preloader({ onEnter }: Props) {
 
                         {/* ── Phase: line ── left-to-right horizontal rule */}
                         <AnimatePresence>
-                            {phase !== "silent" && (
+                            {phase !== "swarm" && (
                                 <motion.div
                                     className="absolute"
                                     style={{ width: "min(360px, 84vw)", height: "1px", top: "calc(50% - 112px)", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)" }}
@@ -155,14 +159,14 @@ export default function Preloader({ onEnter }: Props) {
                                         />
 
                                         <motion.h1
-                                            className="font-bebas text-white leading-none px-4"
+                                            className="font-bebas text-white leading-none px-4 text-center"
                                             style={{
-                                                fontSize: "clamp(68px, 15vw, 118px)",
-                                                letterSpacing: "0.2em",
+                                                fontSize: "clamp(54px, 12vw, 108px)",
+                                                letterSpacing: "0.15em",
                                                 textShadow: "0 0 55px rgba(210,60,0,1), 0 0 120px rgba(180,30,0,0.6)",
                                             }}
-                                            initial={{ opacity: 0, letterSpacing: "0.6em", filter: "blur(25px)", scale: 0.95 }}
-                                            animate={{ opacity: 1, letterSpacing: "0.08em", filter: "blur(0px)", scale: 1 }}
+                                            initial={{ opacity: 0, letterSpacing: "0.4em", filter: "blur(25px)", scale: 0.95 }}
+                                            animate={{ opacity: 1, letterSpacing: "0.12em", filter: "blur(0px)", scale: 1 }}
                                             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
                                         >
                                             DHURANDHAR
@@ -172,7 +176,7 @@ export default function Preloader({ onEnter }: Props) {
                                     {/* THE REVENGE — subtle fade in */}
                                     <motion.div
                                         className="flex"
-                                        style={{ marginTop: "-6px" }}
+                                        style={{ marginTop: "-4px" }}
                                         initial={{ opacity: 0, y: 5 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 1.2, duration: 1.0, ease: "easeOut" }}
@@ -182,8 +186,8 @@ export default function Preloader({ onEnter }: Props) {
                                                 key={i}
                                                 className="font-bebas leading-none"
                                                 style={{
-                                                    fontSize: "clamp(22px, 5vw, 42px)",
-                                                    letterSpacing: "0.35em",
+                                                    fontSize: "clamp(18px, 4vw, 36px)",
+                                                    letterSpacing: "0.3em",
                                                     color: "rgba(225,85,30,0.88)",
                                                     textShadow: "0 0 18px rgba(200,50,0,0.7)",
                                                 }}
@@ -193,7 +197,7 @@ export default function Preloader({ onEnter }: Props) {
 
                                     {/* Divider rule */}
                                     <motion.div
-                                        style={{ width: "min(340px, 80vw)", height: "1px", margin: "20px 0", background: "linear-gradient(90deg, transparent, rgba(200,60,0,0.55), transparent)" }}
+                                        style={{ width: "min(300px, 75vw)", height: "1px", margin: "24px 0", background: "linear-gradient(90deg, transparent, rgba(200,60,0,0.55), transparent)" }}
                                         initial={{ scaleX: 0 }}
                                         animate={{ scaleX: 1 }}
                                         transition={{ delay: 1.6, duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
@@ -201,7 +205,7 @@ export default function Preloader({ onEnter }: Props) {
 
                                     {/* OST label */}
                                     <motion.p
-                                        className="font-mono uppercase tracking-[0.5em] text-[10px]"
+                                        className="font-mono uppercase tracking-[0.5em] text-[9px]"
                                         style={{ color: "rgba(255,255,255,0.3)" }}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
@@ -210,27 +214,50 @@ export default function Preloader({ onEnter }: Props) {
 
                                     {/* Credit — Highlighted Shashwat Sachdev */}
                                     <motion.p
-                                        className="font-cormorant italic tracking-[0.18em] text-[14px] mt-2 font-medium"
+                                        className="font-cormorant italic tracking-[0.16em] text-[13px] mt-2 font-medium"
                                         style={{
-                                            color: "rgba(255,180,100,0.7)",
-                                            textShadow: "0 0 12px rgba(255,100,0,0.3)"
+                                            color: "rgba(255,180,100,0.65)",
+                                            textShadow: "0 0 12px rgba(255,100,0,0.25)"
                                         }}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 2.2, duration: 1.0 }}
                                     >Music by <span style={{ color: "rgba(255,210,130,1)" }}>Shashwat Sachdev</span></motion.p>
 
-                                    {/* Enter CTA */}
+                                    {/* Enter CTA — Fire animated */}
                                     <motion.button
                                         onClick={handleEnter}
-                                        className="mt-12 font-mono uppercase tracking-[0.45em] text-[11px] bg-transparent border-none outline-none cursor-pointer transition-all duration-300"
-                                        style={{ color: "rgba(255,140,70,0.65)" }}
+                                        className="mt-14 font-mono uppercase tracking-[0.45em] text-[11px] bg-transparent border-none outline-none cursor-pointer relative px-8 py-3 group overflow-visible"
+                                        style={{ color: "rgba(255,140,70,0.85)" }}
                                         initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 3.2, duration: 1.2 }}
-                                        whileHover={{ color: "rgba(255,190,110,1)", textShadow: "0 0 14px rgba(255,140,50,0.8)", y: -2 }}
+                                        animate={{
+                                            opacity: 1,
+                                            boxShadow: [
+                                                "0 0 15px rgba(255,100,0,0.1)",
+                                                "0 0 35px rgba(255,130,0,0.3)",
+                                                "0 0 15px rgba(255,100,0,0.1)"
+                                            ],
+                                            color: [
+                                                "rgba(255,140,70,0.85)",
+                                                "rgba(255,200,100,1)",
+                                                "rgba(255,140,70,0.85)"
+                                            ]
+                                        }}
+                                        transition={{
+                                            opacity: { delay: 3.2, duration: 1.2 },
+                                            boxShadow: { repeat: Infinity, duration: 1.5, ease: "easeInOut" },
+                                            color: { repeat: Infinity, duration: 1.5, ease: "easeInOut" }
+                                        }}
+                                        whileHover={{ scale: 1.05, y: -2 }}
                                     >
-                                        &#9654;&nbsp;&nbsp;Enter
+                                        <span className="relative z-10 px-2">&#9654;&nbsp;&nbsp;Enter</span>
+                                        {/* Fire glow ring */}
+                                        <motion.div
+                                            className="absolute inset-x-0 bottom-0 h-[2px] blur-[1px]"
+                                            style={{ background: "linear-gradient(90deg, transparent, #ff6a00, #ffc400, #ff6a00, transparent)" }}
+                                            animate={{ opacity: [0.4, 0.8, 0.4], scaleX: [1, 1.1, 1] }}
+                                            transition={{ repeat: Infinity, duration: 0.8 }}
+                                        />
                                     </motion.button>
                                 </div>
                             )}

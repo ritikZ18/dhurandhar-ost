@@ -50,12 +50,12 @@ function VinylDisc({ isPlaying, color, image }: { isPlaying: boolean; color: str
     }, [isPlaying]);
 
     return (
-        <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
+        <div className="relative flex-shrink-0 w-[190px] h-[190px] lg:w-[340px] lg:h-[340px]">
             {/* The rotating vinyl disc */}
             <svg
                 ref={svgRef}
-                width={size}
-                height={size}
+                width="100%"
+                height="100%"
                 viewBox={`0 0 ${size} ${size}`}
                 className="absolute inset-0"
                 style={{ transform: `rotate(${rotationRef.current}deg)`, transition: isPlaying ? "none" : "transform 1.2s cubic-bezier(0.22, 1, 0.36, 1)" }}
@@ -96,10 +96,10 @@ function VinylDisc({ isPlaying, color, image }: { isPlaying: boolean; color: str
             <div
                 className="absolute rounded-full overflow-hidden pointer-events-none"
                 style={{
-                    width: labelSize,
-                    height: labelSize,
-                    top: (size - labelSize) / 2,
-                    left: (size - labelSize) / 2,
+                    width: `${(labelSize / size) * 100}%`,
+                    height: `${(labelSize / size) * 100}%`,
+                    top: `${((size - labelSize) / 2 / size) * 100}%`,
+                    left: `${((size - labelSize) / 2 / size) * 100}%`,
                     zIndex: 5,
                     boxShadow: `0 0 25px rgba(0,0,0,0.6)`
                 }}
@@ -137,13 +137,13 @@ export default function PlayerHero({ track, themeKey, engine, onNext, onPrev, sh
     };
 
     return (
-        <section className="flex flex-col gap-6 px-8 py-8">
+        <section className="flex flex-col gap-4 lg:gap-6 px-6 lg:px-8 py-4 lg:py-8">
 
-            {/* ── TOP: title (left) + vinyl (right) ── */}
-            <div className="flex items-center justify-between gap-5">
+            {/* ── TOP: title + vinyl ── */}
+            <div className="flex flex-col-reverse sm:flex-row items-center sm:items-center justify-between gap-4 sm:gap-5">
 
-                {/* Text block — left */}
-                <div className="flex flex-col justify-center gap-[4px] min-w-0 flex-1">
+                {/* Text block */}
+                <div className="flex flex-col justify-center gap-[4px] min-w-0 flex-1 text-center sm:text-left">
                     <p
                         className="font-mono text-[9px] tracking-[0.45em] uppercase"
                         style={{ color: th.p1, opacity: 0.8, transition: "color 0.9s ease" }}
@@ -156,15 +156,15 @@ export default function PlayerHero({ track, themeKey, engine, onNext, onPrev, sh
                             key={track?.title ?? "idle"}
                             className="font-bebas leading-[0.9] tracking-[0.015em] line-clamp-2"
                             style={{
-                                fontSize: "clamp(28px, 3.8vw, 52px)",
+                                fontSize: "clamp(28px, 4.5vw, 52px)",
                                 color: th.text,
                                 textShadow: `0 0 40px ${th.p1}25`,
                                 transition: "color 0.9s ease",
                             }}
-                            initial={{ opacity: 0, x: -18 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.4, ease: "easeOut" }}
                         >
                             {track ? track.title.toUpperCase() : "SELECT A TRACK"}
                         </motion.h1>
@@ -184,12 +184,12 @@ export default function PlayerHero({ track, themeKey, engine, onNext, onPrev, sh
                     )}
                 </div>
 
-                {/* Vinyl disc — RIGHT */}
+                {/* Vinyl disc */}
                 <VinylDisc isPlaying={engine.isPlaying} color={th.p1} image={track?.image} />
             </div>
 
             {/* ── VISUALIZER ── */}
-            <div className="flex items-end gap-[3px] h-6 mt-1">
+            <div className="flex items-end gap-[3px] h-5 lg:h-6 mt-1 justify-center sm:justify-start">
                 {Array.from({ length: 14 }, (_, i) => (
                     <div
                         key={i}
@@ -231,23 +231,23 @@ export default function PlayerHero({ track, themeKey, engine, onNext, onPrev, sh
             </div>
 
             {/* ── TRANSPORT ── */}
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-4 lg:gap-5">
                 {/* Shuffle */}
                 <button onClick={onToggleShuffle} aria-label="Shuffle"
-                    className="p-2 transition-all duration-200 hover:scale-110"
+                    className="p-1 lg:p-2 transition-all duration-200 hover:scale-110"
                     style={{ color: shuffleOn ? th.p1 : th.muted, opacity: shuffleOn ? 1 : 0.5 }}
                 >
-                    <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
                     </svg>
                 </button>
 
                 {/* Prev */}
                 <button onClick={onPrev} aria-label="Previous"
-                    className="p-2 opacity-60 hover:opacity-100 transition-all hover:scale-110"
+                    className="p-1 lg:p-2 opacity-60 hover:opacity-100 transition-all hover:scale-110"
                     style={{ color: th.text }}
                 >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
                     </svg>
                 </button>
@@ -258,9 +258,10 @@ export default function PlayerHero({ track, themeKey, engine, onNext, onPrev, sh
                     disabled={!canPlay}
                     whileHover={{ scale: canPlay ? 1.07 : 1 }}
                     whileTap={{ scale: 0.93 }}
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center shrink-0"
                     style={{
-                        width: 58, height: 58,
+                        width: "clamp(50px, 12vw, 58px)",
+                        height: "clamp(50px, 12vw, 58px)",
                         background: canPlay ? th.p1 : `${th.p1}45`,
                         color: "#04000a",
                         boxShadow: canPlay ? `0 0 28px ${th.glow}, 0 0 6px ${th.glow}` : "none",
@@ -269,17 +270,17 @@ export default function PlayerHero({ track, themeKey, engine, onNext, onPrev, sh
                     }}
                 >
                     {engine.isPlaying
-                        ? <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
-                        : <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                        ? <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
+                        : <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
                     }
                 </motion.button>
 
                 {/* Next */}
                 <button onClick={onNext} aria-label="Next"
-                    className="p-2 opacity-60 hover:opacity-100 transition-all hover:scale-110"
+                    className="p-1 lg:p-2 opacity-60 hover:opacity-100 transition-all hover:scale-110"
                     style={{ color: th.text }}
                 >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8zM16 6h2v12h-2z" />
                     </svg>
                 </button>
